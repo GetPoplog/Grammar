@@ -1,0 +1,100 @@
+Grammar ::= Expression
+
+Expression ::= 
+	Literal
+	| Variable
+	| Assignment
+	| Definition
+	| Declaration
+	| Conditional
+	| BooleanExpression
+	| Iterative
+	| OperatorExpression
+	| FunctionApplication
+	| Jump
+	| Label
+	| '(' Sequence ')'
+
+Definition ::=
+	'define' Word ('(' Varslist? ')' | Varslist)? ('->' Varslist)* ';' Sequence 'enddefine'
+
+Assignment ::=
+	Expression ('->' | '->>') (Variable | FunctionApplication)
+	| Expression '-->' Expression
+
+Variable ::=
+	Word
+	| 'nonop' Operation
+	| 'nonmac' Macro
+	| 'nonsyntax' SyntaxWord
+
+Declaration ::=
+	('global'? ('vars' | 'constant') Varslist | 'lvars' (',' | Word)+) ';'
+
+Varslist ::=
+	((','* Word?)+ ('macro' | 'syntax' | Number) Word)+
+
+Sequence ::=
+	(Expression (',' | ';' | '=>' | '==>'))+
+
+Literal ::=
+	Number
+	| String
+	| '"' Word '"'
+	| Construct
+
+Construct ::=
+	ListConstruct
+	| PatternConstruct
+	| VectorConstruct
+
+VectorConstruct ::=
+	'{' ListSegment* '}'
+
+ListConstruct ::=
+	'[' ListSegment* ']'
+
+PatternConstruct ::=
+	'[' PatternSegment ']'
+
+ListSegment ::=
+	'%' Sequence '%'
+	| Word
+	| Literal
+	| Construct
+	| ('^' | '^^') (Word | '(' Sequence ')')
+
+PatternSegment ::=
+	ListSegment
+	| ('?' | '??') Word (':' (Integer | Word | ListSegment))?
+	| '='
+	| '=='
+
+Label ::=
+	Word ':'
+
+Jump ::=
+	'goto' Word
+
+Iterative ::=
+	'for' Expression 'step' Expression 'till' Expression 'do' Sequence 'endfor'
+	| 'while' Expression 'do' Sequence 'endwhile'
+	| 'until' Expression 'do' Sequence 'enduntil'
+	| 'for' Word (('in' | 'on') | ('from' Expression ('by' Expression)?)? 'to') Expression 'do' Sequence 'endfor'
+	| 'foreach' Expression ('in' Expression)? 'do' Sequence 'endforeach'
+	| 'forevery' Expression ('in' Expression)? 'do' Sequence 'endforevery'
+	| 'repeat' (Expression 'times' | 'forever')? Sequence 'endrepeat'
+
+Conditional ::=
+	'if' Expression 'then' Sequence ('elseif' Expression 'then' Sequence)* 'endif'
+	| 'unless' Expression 'then' Sequence ('elseunless' Expression 'then' Sequence)* 'endunless'
+
+BooleanExpression ::=
+	Expression (('and' | 'or') Expression)*
+
+OperatorExpression ::=
+	Expression Operator Expression
+
+FunctionApplication ::=
+	Expression '(' (Expression (',' Expression)*)? ')'
+	| '.' Expression

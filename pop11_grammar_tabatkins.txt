@@ -1,0 +1,499 @@
+// Expression
+Diagram(
+	Comment('Expression'),
+	Choice(0,
+		NonTerminal('literal'),
+		NonTerminal('variable'),
+		NonTerminal('assignment'),
+		NonTerminal('definition'),
+		NonTerminal('declaration'),
+		NonTerminal('conditional'),
+		NonTerminal('boolean expression'),
+		NonTerminal('iterative'),
+		NonTerminal('operator expression'),
+		NonTerminal('function application'),
+		NonTerminal('jump'),
+		NonTerminal('label'),
+		Sequence(
+			Terminal('('),
+			NonTerminal('sequence'),
+			Terminal(')')
+		)
+	)
+)
+
+// Definition
+Diagram(
+	Comment('Definition'),
+	Sequence(
+		Terminal('define'),
+		NonTerminal('word'),
+		Choice(0,
+			Skip(),			
+			Sequence(
+				Terminal('('),
+				Optional(
+					NonTerminal('varslist')
+				),
+				Terminal(')')
+			),
+			NonTerminal('varslist'),
+		),
+		ZeroOrMore(
+			Sequence(
+				Terminal('->'),
+				NonTerminal('varslist')
+			),
+			undefined,
+			'skip'
+		),
+		Terminal(';'),
+		NonTerminal('sequence'),
+		Terminal('enddefine')
+	)
+)
+
+// Assignment
+Diagram(
+	Comment('Assignment'),
+	Choice(0,
+		Sequence(
+			NonTerminal('expression'),
+			Choice(0,
+				Terminal('->'),
+				Terminal('->>')
+			),
+			Choice(0,
+				NonTerminal('variable'),
+				NonTerminal('function application')
+			)
+		),
+		Sequence(
+			NonTerminal('expression'),
+			Terminal('-->'),
+			NonTerminal('expression')
+		)
+	)
+)
+
+// Variable
+Diagram(
+	Comment('Variable'),
+	Choice(0,
+		NonTerminal('word'),
+		Sequence(
+			Terminal('nonop'),
+			NonTerminal('operation')
+		),
+		Sequence(
+			Terminal('nonmac'),
+			NonTerminal('macro')
+		),
+		Sequence(
+			Terminal('nonsyntax'),
+			NonTerminal('syntax word')
+		)
+	)
+)
+
+// Declaration
+Diagram(
+	Comment('Declaration'),
+	Sequence(
+		Choice(0,
+			Sequence(
+				Optional(
+					Terminal('global'),
+					'skip'
+				),
+				Choice(0,
+					Terminal('vars'),
+					Terminal('constant')
+				),
+				NonTerminal('varslist')
+			),
+			Sequence(
+				Terminal('lvars'),
+				OneOrMore(
+					Choice(0,
+						Terminal(','),
+						NonTerminal('word')
+					)
+				)
+			)
+		),
+		Terminal(';')
+	)
+)
+
+// Varslist
+Diagram(
+	Comment('Varslist'),
+	OneOrMore(
+		Sequence(
+			OneOrMore(
+				Sequence(
+					ZeroOrMore(
+						Terminal(','),
+						undefined,
+						'skip'
+					),
+					Optional(
+						NonTerminal('word'),
+						'skip'
+					)
+				)
+			),
+			Choice(1,
+				Terminal('macro'),
+				Terminal('syntax'),
+				NonTerminal('number')
+			),
+			NonTerminal('word')
+		)
+	)
+)
+
+// Sequence
+Diagram(
+	Comment('Sequence'),
+	OneOrMore(
+		NonTerminal('expression'),
+		Choice(0,
+			Terminal(','),
+			Terminal(';'),
+			Terminal('=>'),
+			Terminal('==>')
+		)
+	)
+)
+
+// Literal
+Diagram(
+	Comment('Literal'),
+	Choice(0,
+		NonTerminal('number'),
+		NonTerminal('string'),
+		Sequence(
+			Terminal('"'),
+			NonTerminal('word'),
+			Terminal('"')
+		),
+		NonTerminal('construct')
+	)
+)
+
+// Construct
+Diagram(
+	Comment('Construct'),
+    Choice(0,
+		NonTerminal('list construct'),
+		NonTerminal('pattern construct'),
+		NonTerminal('vector construct')
+    )
+)
+
+// Vector construct
+Diagram(
+	Comment('Vector construct'),
+	Sequence(
+		Terminal('{'),
+		ZeroOrMore(
+			NonTerminal('list segment'),
+			undefined,
+			'skip'
+		),
+		Terminal('}')
+	)
+)
+
+// List construct
+Diagram(
+	Comment('List construct'),
+	Sequence(
+		Terminal('['),
+		ZeroOrMore(
+			NonTerminal('list segment'),
+			undefined,
+			'skip'
+		),
+		Terminal(']')
+	)
+)
+
+// Pattern construct
+Diagram(
+	Comment('Pattern construct'),
+	Sequence(
+		Terminal('['),
+		ZeroOrMore(
+			NonTerminal('pattern segment'),
+			undefined,
+			'skip'
+		),
+		Terminal(']')
+	)
+)
+
+// List segment
+Diagram(
+	Comment('List segment'),
+	Choice(0,
+		Sequence(
+			Terminal('%'),
+			NonTerminal('sequence'),
+			Terminal('%')
+		),
+		NonTerminal('word'),
+		NonTerminal('literal'),
+		NonTerminal('construct'),
+		Sequence(
+			Choice(0,
+				Terminal('^'),
+				Terminal('^^')
+			),
+			Choice(0,
+				NonTerminal('word'),
+				Sequence(
+					Terminal('('),
+					NonTerminal('sequence'),
+					Terminal(')')
+				)
+			)
+		)
+	)
+)
+
+// Pattern segment
+Diagram(
+	Comment('Pattern segment'),
+	Choice(0,
+		NonTerminal('list segment'),
+		Sequence(
+			Choice(0,
+				Terminal('?'),
+				Terminal('??')
+			),
+			NonTerminal('word'),
+			Optional(
+				Sequence(
+					Terminal(':'),
+					Choice(0,
+						NonTerminal('integer'),
+						NonTerminal('word'),
+						NonTerminal('list segment')
+					)
+				),
+				'skip'
+			)
+		),
+		Terminal('='),
+		Terminal('=='),
+	)
+)
+
+// Label
+Diagram(
+	Comment('Label'),
+	Sequence(
+		NonTerminal('word'),
+		Terminal(':')
+	)
+)
+
+// Jump
+Diagram(
+	Comment('Jump'),
+	Sequence(
+		Terminal('goto'),
+		NonTerminal('word')
+	)
+)
+
+// Iterative (i)
+Diagram(
+	Comment('Iterative (i)'),
+	Sequence(
+		Terminal('for'),
+		NonTerminal('expression'),
+		Terminal('step'),
+		NonTerminal('expression'),
+		Terminal('till'),
+		NonTerminal('expression'),
+		Terminal('do'),
+		NonTerminal('sequence'),
+		Terminal('endfor')
+	)
+)
+
+// Iterative (ii)
+Diagram(
+	Comment('Iterative (ii)'),
+	Sequence(
+		Choice(0,
+			Terminal('while'),
+			Terminal('until')
+		),
+		NonTerminal('expression'),
+		Terminal('do'),
+		NonTerminal('sequence'),
+		Choice(0,
+			Terminal('endwhile'),
+			Terminal('enduntil')
+		),
+	)
+)
+
+// Iterative (iii)
+Diagram(
+	Comment('Iterative (iii)'),
+	Sequence(
+		Terminal('for'),
+		NonTerminal('word'),
+		Choice(0,
+			Choice(0,
+				Terminal('in'),
+				Terminal('on')
+			),
+			Sequence(
+				Optional(
+					Sequence(
+						Terminal('from'),
+						NonTerminal('expression'),
+						Optional(
+							Sequence(
+								Terminal('by'),
+								NonTerminal('expression')
+							),
+							'skip'
+						)
+					),
+					'skip'
+				),
+				Terminal('to')
+			)
+		),
+		NonTerminal('expression'),
+		Terminal('do'),
+		NonTerminal('sequence'),
+		Terminal('endfor')
+	)
+)
+
+// Iterative (iv)
+Diagram(
+	Comment('Iterative (iv)'),
+	Sequence(
+		Choice(0,
+			Terminal('foreach'),
+			Terminal('forevery')
+		),
+		NonTerminal('expression'),
+		Optional(
+			Sequence(
+				Terminal('in'),
+				NonTerminal('expression')
+			)
+		),
+		Terminal('do'),
+		NonTerminal('sequence'),
+		Choice(0,
+			Terminal('endforeach'),
+			Terminal('endforevery')
+		),
+	)
+)
+
+// Iterative (v)
+Diagram(
+	Comment('Iterative (v)'),
+	Sequence(
+		Terminal('repeat'),
+		Choice(0,
+			Skip(),
+			Sequence(
+				NonTerminal('expression'),
+				Terminal('times')
+			),
+			Terminal('forever')
+		),
+		NonTerminal('sequence'),
+		Terminal('endrepeat')
+	)
+)
+
+// Conditional
+Diagram(
+	Comment('Conditional'),
+	Sequence(
+		Choice(0,
+			Terminal('if'),
+			Terminal('unless')
+		),
+		OneOrMore(
+			Sequence(
+				NonTerminal('expression'),
+				Terminal('then'),
+				NonTerminal('sequence')
+			),
+			Choice(0,
+				Terminal('elseif'),
+				Terminal('elseunless')
+			)
+		),
+		Optional(
+			Sequence(
+				Terminal('else'),
+				NonTerminal('sequence')
+			),
+			'skip'
+		),
+		Choice(0,
+			Terminal('endif'),
+			Terminal('endunless')
+		)
+	)
+)
+
+// Boolean expression
+Diagram(
+	Comment('Boolean expression'),
+	OneOrMore(
+		NonTerminal('expression'),
+		Choice(0,
+			Terminal('and'),
+			Terminal('or')
+		)
+	)
+)
+
+// Operator expression
+Diagram(
+	Comment('Operator expression'),
+	Sequence(
+		NonTerminal('expression'),
+		NonTerminal('operator'),
+		NonTerminal('expression')
+	)
+)
+
+// Function application
+Diagram(
+	Comment('Function application'),
+	Choice(0,
+		Sequence(
+			NonTerminal('expression'),
+			Terminal('('),
+			ZeroOrMore(
+				NonTerminal('expression'),
+				Terminal(','),
+				'skip'
+			),
+			Terminal(')')
+		),
+		Sequence(
+			Terminal('.'),
+			NonTerminal('expression')
+		)
+	)
+)
