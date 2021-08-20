@@ -2,6 +2,7 @@ Grammar ::= Expression
 
 Expression ::= 
 	Literal
+	| ConstantExpression
 	| Variable
 	| Assignment
 	| Definition
@@ -14,6 +15,10 @@ Expression ::=
 	| Jump
 	| Label
 	| '(' Sequence ')'
+
+ConstantExpression ::=
+	Construct
+	| '"' Word '"'
 
 Definition ::=
 	'define' Word ('(' Varslist? ')' | Varslist)? ('->' Varslist)* ';' Sequence 'enddefine'
@@ -29,7 +34,7 @@ Variable ::=
 	| 'nonsyntax' SyntaxWord
 
 Declaration ::=
-	('global'? ('vars' | 'constant') Varslist | 'lvars' (',' | Word)+) ';'
+	('global'? ('vars' 'procedure'? | 'constant') Varslist | ('lvars' | 'lconstant' | 'dlocal') (',' | Word)+) ';'
 
 Varslist ::=
 	((','* Word?)+ ('macro' | 'syntax' | Number) Word)+
@@ -40,8 +45,7 @@ Sequence ::=
 Literal ::=
 	Number
 	| String
-	| '"' Word '"'
-	| Construct
+	| '"' String '"'
 
 Construct ::=
 	ListConstruct
@@ -71,7 +75,7 @@ PatternSegment ::=
 	| '=='
 
 Label ::=
-	Word ':'
+	Word ':' '*'?
 
 Jump ::=
 	'goto' Word
@@ -81,13 +85,14 @@ Iterative ::=
 	| 'while' Expression 'do' Sequence 'endwhile'
 	| 'until' Expression 'do' Sequence 'enduntil'
 	| 'for' Word (('in' | 'on') | ('from' Expression ('by' Expression)?)? 'to') Expression 'do' Sequence 'endfor'
+	| 'for' Word 'from_repeater' Expression 'do' Sequence 'endfor'
 	| 'foreach' Expression ('in' Expression)? 'do' Sequence 'endforeach'
 	| 'forevery' Expression ('in' Expression)? 'do' Sequence 'endforevery'
 	| 'repeat' (Expression 'times' | 'forever')? Sequence 'endrepeat'
 
 Conditional ::=
-	'if' Expression 'then' Sequence ('elseif' Expression 'then' Sequence)* 'endif'
-	| 'unless' Expression 'then' Sequence ('elseunless' Expression 'then' Sequence)* 'endunless'
+	'if' Expression 'then' Sequence (('elseif' | 'elseunless') Expression 'then' Sequence)* ('else' Expression)? 'endif'
+	| 'unless' Expression 'then' Sequence (('elseif' | 'elseunless') Expression 'then' Sequence)* ('else' Expression)? 'endunless'
 
 BooleanExpression ::=
 	Expression (('and' | 'or') Expression)*
@@ -96,5 +101,5 @@ OperatorExpression ::=
 	Expression Operator Expression
 
 FunctionApplication ::=
-	Expression '(' (Expression (',' Expression)*)? ')'
+	Expression '(' Expression? (',' Expression?)* ')'
 	| '.' Expression
