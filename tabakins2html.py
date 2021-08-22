@@ -118,8 +118,8 @@ svg.railroad-diagram g.diagram-text:hover path.diagram-text {
 </html>
 """
 
-def print_tadatkins_grammar_as_html():
+def print_tabatkins_grammar_as_html():
     print( pymustache.render( mustache_template, { 'DIAGRAMS': svg_list() } ) )
 
 if __name__ == "__main__":
-    print_tadatkins_grammar_as_html()
+    print_tabatkins_grammar_as_html()
