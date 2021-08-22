@@ -25,7 +25,7 @@ def eval_expression(input_string, allowed_names = {}):
             raise NameError(f"Use of {name} not allowed")
     return eval(code, {"__builtins__": {}}, allowed_names)
 
-def pars_tadatkins_file():
+def parse_tabatkins_file():
     dump = []
     current = []
     with open( 'pop11_grammar_tabatkins.txt', 'r' ) as file:
@@ -45,10 +45,10 @@ def diagram2string( diag ):
         diag.writeSvg(buffer.write)   
         return buffer.getvalue()
 
-def svgList():
+def svg_list():
     return [ 
-        { 'svg': diagram2string( eval_expression(diag_text, allowed_names) ) }
-        for diag_text in pars_tadatkins_file() 
+        { 'svg': diagram2string( eval_expression(diag_text, ALLOWED_NAMES) ) }
+        for diag_text in parse_tabatkins_file() 
     ]
 
 mustache_template = """
@@ -119,7 +119,7 @@ svg.railroad-diagram g.diagram-text:hover path.diagram-text {
 """
 
 def print_tadatkins_grammar_as_html():
-    print( pymustache.render( mustache_template, { 'DIAGRAMS': svg_list } ) )
+    print( pymustache.render( mustache_template, { 'DIAGRAMS': svg_list() } ) )
 
 if __name__ == "__main__":
     print_tadatkins_grammar_as_html()
