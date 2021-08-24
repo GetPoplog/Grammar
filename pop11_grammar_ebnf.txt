@@ -19,6 +19,7 @@ Expression ::=
 ConstantExpression ::=
 	Construct
 	| '"' Word '"'
+	| '"' String '"'
 
 Definition ::=
 	'define' Word ('(' Varslist? ')' | Varslist)? ('->' Varslist)* ';' Sequence 'enddefine'
@@ -34,10 +35,12 @@ Variable ::=
 	| 'nonsyntax' SyntaxWord
 
 Declaration ::=
-	('global'? ('vars' 'procedure'? | 'constant') Varslist | ('lvars' | 'lconstant' | 'dlocal') (',' | Word)+) ';'
+	'global'? ('vars' 'procedure'? | 'constant') Varslist ';'
+	| 'lvars' 'procedure'? (',' | Word)+ ';'
+	| 'dlocal' (',' | Word)+ ';'
 
 Varslist ::=
-	((','* Word?)+ ('macro' | 'syntax' | Number) Word)+
+	(','* ('macro' | 'syntax' | Number)? Word)+
 
 Sequence ::=
 	(Expression (',' | ';' | '=>' | '==>'))+
@@ -45,7 +48,6 @@ Sequence ::=
 Literal ::=
 	Number
 	| String
-	| '"' String '"'
 
 Construct ::=
 	ListConstruct
