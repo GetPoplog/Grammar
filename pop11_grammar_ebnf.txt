@@ -35,12 +35,12 @@ Variable ::=
 	| 'nonsyntax' SyntaxWord
 
 Declaration ::=
-	'global'? ('vars' 'procedure'? | 'constant') Varslist ';'
-	| 'lvars' 'procedure'? (',' | Word)+ ';'
+	'global'? ('vars' | 'constant') Varslist ';'
+	| 'lvars' (',' | Word)+ ';'
 	| 'dlocal' (',' | Word)+ ';'
 
 Varslist ::=
-	(','* ('macro' | 'syntax' | Number)? Word)+
+	(','* ('procedure' | 'macro' | 'syntax' | Number)? Word)+
 
 Sequence ::=
 	(Expression (',' | ';' | '=>' | '==>'))+
