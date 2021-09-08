@@ -1,8 +1,15 @@
+// Grammar
+Diagram(
+	Comment('Grammar'),
+	NonTerminal('expression')
+)
+
 // Expression
 Diagram(
 	Comment('Expression'),
 	Choice(0,
 		NonTerminal('literal'),
+		NonTerminal('constant expression'),
 		NonTerminal('variable'),
 		NonTerminal('assignment'),
 		NonTerminal('definition'),
@@ -22,35 +29,51 @@ Diagram(
 	)
 )
 
+// Constant expression
+Diagram(
+	Comment('Constant expression'),
+	Choice(0,
+		NonTerminal('construct'),
+		Sequence(
+			Terminal('"'),
+			NonTerminal('word'),
+			Terminal('"')
+		),
+		Sequence(
+			Terminal('"'),
+			NonTerminal('string'),
+			Terminal('"')
+		)
+	)
+)
+
 // Definition
 Diagram(
 	Comment('Definition'),
-	Sequence(
-		Terminal('define'),
-		NonTerminal('word'),
-		Choice(0,
-			Skip(),			
-			Sequence(
-				Terminal('('),
-				Optional(
-					NonTerminal('varslist')
-				),
-				Terminal(')')
-			),
-			NonTerminal('varslist'),
-		),
-		ZeroOrMore(
-			Sequence(
-				Terminal('->'),
+	Terminal('define'),
+	NonTerminal('word'),
+	Choice(0,
+		Skip(),			
+		Sequence(
+			Terminal('('),
+			Optional(
 				NonTerminal('varslist')
 			),
-			undefined,
-			'skip'
+			Terminal(')')
 		),
-		Terminal(';'),
-		NonTerminal('sequence'),
-		Terminal('enddefine')
-	)
+		NonTerminal('varslist'),
+	),
+	ZeroOrMore(
+		Sequence(
+			Terminal('->'),
+			NonTerminal('varslist')
+		),
+		undefined,
+		'skip'
+	),
+	Terminal(';'),
+	NonTerminal('sequence'),
+	Terminal('enddefine')
 )
 
 // Assignment
@@ -99,31 +122,40 @@ Diagram(
 // Declaration
 Diagram(
 	Comment('Declaration'),
-	Sequence(
-		Choice(0,
-			Sequence(
-				Optional(
-					Terminal('global'),
-					'skip'
-				),
-				Choice(0,
-					Terminal('vars'),
-					Terminal('constant')
-				),
-				NonTerminal('varslist')
+	Choice(0,
+		Sequence(
+			Optional(
+				Terminal('global'),
+				'skip'
 			),
-			Sequence(
-				Terminal('lvars'),
-				OneOrMore(
-					Choice(0,
-						Terminal(','),
-						NonTerminal('word')
-					)
-				)
-			)
+			Choice(0,
+				Terminal('vars'),
+				Terminal('constant')
+			),
+			NonTerminal('varslist'),
+			Terminal(';')
 		),
-		Terminal(';')
-	)
+		Sequence(
+			Terminal('lvars'),
+			OneOrMore(
+				Choice(0,
+					Terminal(','),
+					NonTerminal('word')
+				)
+			),
+			Terminal(';')
+		),
+		Sequence(
+			Terminal('dlocal'),
+			OneOrMore(
+				Choice(0,
+					Terminal(','),
+					NonTerminal('word')
+				)
+			),
+			Terminal(';')
+		)
+	)	
 )
 
 // Varslist
@@ -131,20 +163,14 @@ Diagram(
 	Comment('Varslist'),
 	OneOrMore(
 		Sequence(
-			OneOrMore(
-				Sequence(
-					ZeroOrMore(
-						Terminal(','),
-						undefined,
-						'skip'
-					),
-					Optional(
-						NonTerminal('word'),
-						'skip'
-					)
-				)
+			ZeroOrMore(
+				Terminal(','),
+				undefined,
+				'skip'
 			),
-			Choice(1,
+			Choice(0,
+				Skip(),
+				Terminal('procedure'),
 				Terminal('macro'),
 				Terminal('syntax'),
 				NonTerminal('number')
@@ -173,13 +199,7 @@ Diagram(
 	Comment('Literal'),
 	Choice(0,
 		NonTerminal('number'),
-		NonTerminal('string'),
-		Sequence(
-			Terminal('"'),
-			NonTerminal('word'),
-			Terminal('"')
-		),
-		NonTerminal('construct')
+		NonTerminal('string')
 	)
 )
 
@@ -196,43 +216,37 @@ Diagram(
 // Vector construct
 Diagram(
 	Comment('Vector construct'),
-	Sequence(
-		Terminal('{'),
-		ZeroOrMore(
-			NonTerminal('list segment'),
-			undefined,
-			'skip'
-		),
-		Terminal('}')
-	)
+	Terminal('{'),
+	ZeroOrMore(
+		NonTerminal('list segment'),
+		undefined,
+		'skip'
+	),
+	Terminal('}')
 )
 
 // List construct
 Diagram(
 	Comment('List construct'),
-	Sequence(
-		Terminal('['),
-		ZeroOrMore(
-			NonTerminal('list segment'),
-			undefined,
-			'skip'
-		),
-		Terminal(']')
-	)
+	Terminal('['),
+	ZeroOrMore(
+		NonTerminal('list segment'),
+		undefined,
+		'skip'
+	),
+	Terminal(']')
 )
 
 // Pattern construct
 Diagram(
 	Comment('Pattern construct'),
-	Sequence(
-		Terminal('['),
-		ZeroOrMore(
-			NonTerminal('pattern segment'),
-			undefined,
-			'skip'
-		),
-		Terminal(']')
-	)
+	Terminal('['),
+	ZeroOrMore(
+		NonTerminal('pattern segment'),
+		undefined,
+		'skip'
+	),
+	Terminal(']')
 )
 
 // List segment
@@ -295,164 +309,197 @@ Diagram(
 // Label
 Diagram(
 	Comment('Label'),
-	Sequence(
-		NonTerminal('word'),
-		Terminal(':')
+	NonTerminal('word'),
+	Terminal(':'),
+	Optional(
+		Terminal('*'),
+		'skip'
 	)
 )
 
 // Jump
 Diagram(
 	Comment('Jump'),
-	Sequence(
-		Terminal('goto'),
-		NonTerminal('word')
-	)
+	Terminal('goto'),
+	NonTerminal('word')
 )
 
 // Iterative (i)
 Diagram(
 	Comment('Iterative (i)'),
-	Sequence(
-		Terminal('for'),
-		NonTerminal('expression'),
-		Terminal('step'),
-		NonTerminal('expression'),
-		Terminal('till'),
-		NonTerminal('expression'),
-		Terminal('do'),
-		NonTerminal('sequence'),
-		Terminal('endfor')
-	)
+	Terminal('for'),
+	NonTerminal('expression'),
+	Terminal('step'),
+	NonTerminal('expression'),
+	Terminal('till'),
+	NonTerminal('expression'),
+	Terminal('do'),
+	NonTerminal('sequence'),
+	Terminal('endfor')
 )
 
 // Iterative (ii)
 Diagram(
 	Comment('Iterative (ii)'),
-	Sequence(
-		Choice(0,
-			Terminal('while'),
-			Terminal('until')
-		),
-		NonTerminal('expression'),
-		Terminal('do'),
-		NonTerminal('sequence'),
-		Choice(0,
-			Terminal('endwhile'),
-			Terminal('enduntil')
-		),
-	)
+	Terminal('while')),
+	NonTerminal('expression'),
+	Terminal('do'),
+	NonTerminal('sequence'),
+	Terminal('endwhile')
 )
 
 // Iterative (iii)
 Diagram(
 	Comment('Iterative (iii)'),
-	Sequence(
-		Terminal('for'),
-		NonTerminal('word'),
-		Choice(0,
-			Choice(0,
-				Terminal('in'),
-				Terminal('on')
-			),
-			Sequence(
-				Optional(
-					Sequence(
-						Terminal('from'),
-						NonTerminal('expression'),
-						Optional(
-							Sequence(
-								Terminal('by'),
-								NonTerminal('expression')
-							),
-							'skip'
-						)
-					),
-					'skip'
-				),
-				Terminal('to')
-			)
-		),
-		NonTerminal('expression'),
-		Terminal('do'),
-		NonTerminal('sequence'),
-		Terminal('endfor')
-	)
+	Terminal('until'),
+	NonTerminal('expression'),
+	Terminal('do'),
+	NonTerminal('sequence'),
+	Terminal('enduntil')
 )
 
 // Iterative (iv)
 Diagram(
 	Comment('Iterative (iv)'),
-	Sequence(
+	Terminal('for'),
+	NonTerminal('word'),
+	Choice(0,
 		Choice(0,
-			Terminal('foreach'),
-			Terminal('forevery')
+			Terminal('in'),
+			Terminal('on')
 		),
-		NonTerminal('expression'),
-		Optional(
-			Sequence(
-				Terminal('in'),
-				NonTerminal('expression')
-			)
-		),
-		Terminal('do'),
-		NonTerminal('sequence'),
-		Choice(0,
-			Terminal('endforeach'),
-			Terminal('endforevery')
-		),
-	)
+		Sequence(
+			Optional(
+				Sequence(
+					Terminal('from'),
+					NonTerminal('expression'),
+					Optional(
+						Sequence(
+							Terminal('by'),
+							NonTerminal('expression')
+						),
+						'skip'
+					)
+				),
+				'skip'
+			),
+			Terminal('to')
+		)
+	),
+	NonTerminal('expression'),
+	Terminal('do'),
+	NonTerminal('sequence'),
+	Terminal('endfor')
 )
 
 // Iterative (v)
 Diagram(
 	Comment('Iterative (v)'),
-	Sequence(
-		Terminal('repeat'),
-		Choice(0,
-			Skip(),
-			Sequence(
-				NonTerminal('expression'),
-				Terminal('times')
-			),
-			Terminal('forever')
-		),
-		NonTerminal('sequence'),
-		Terminal('endrepeat')
-	)
+	Terminal('for'),
+	NonTerminal('word'),
+	Terminal('from_repeater'),
+	NonTerminal('expression'),
+	Terminal('do'),
+	NonTerminal('sequence'),
+	Terminal('endfor')
 )
 
-// Conditional
+// Iterative (vi)
 Diagram(
-	Comment('Conditional'),
-	Sequence(
-		Choice(0,
-			Terminal('if'),
-			Terminal('unless')
-		),
-		OneOrMore(
-			Sequence(
-				NonTerminal('expression'),
-				Terminal('then'),
-				NonTerminal('sequence')
-			),
-			Choice(0,
-				Terminal('elseif'),
-				Terminal('elseunless')
-			)
-		),
-		Optional(
-			Sequence(
-				Terminal('else'),
-				NonTerminal('sequence')
-			),
-			'skip'
-		),
-		Choice(0,
-			Terminal('endif'),
-			Terminal('endunless')
+	Comment('Iterative (vi)'),
+	Terminal('foreach'),
+	NonTerminal('expression'),
+	Optional(
+		Sequence(
+			Terminal('in'),
+			NonTerminal('expression')
 		)
-	)
+	),
+	Terminal('do'),
+	NonTerminal('sequence'),
+	Terminal('endforeach')
+)
+
+// Iterative (vii)
+Diagram(
+	Comment('Iterative (vii)'),
+	Terminal('forevery'),
+	NonTerminal('expression'),
+	Optional(
+		Sequence(
+			Terminal('in'),
+			NonTerminal('expression')
+		)
+	),
+	Terminal('do'),
+	NonTerminal('sequence'),
+	Terminal('endforevery')
+)
+
+// Iterative (viii)
+Diagram(
+	Comment('Iterative (viii)'),
+	Terminal('repeat'),
+	Choice(0,
+		Skip(),
+		Sequence(
+			NonTerminal('expression'),
+			Terminal('times')
+		),
+		Terminal('forever')
+	),
+	NonTerminal('sequence'),
+	Terminal('endrepeat')
+)
+
+// Conditional (i)
+Diagram(
+	Comment('Conditional (i)'),
+	Terminal('if'),
+	OneOrMore(
+		Sequence(
+			NonTerminal('expression'),
+			Terminal('then'),
+			NonTerminal('sequence')
+		),
+		Choice(0,
+			Terminal('elseif'),
+			Terminal('elseunless')
+		)
+	),
+	Optional(
+		Sequence(
+			Terminal('else'),
+			NonTerminal('sequence')
+		),
+		'skip'
+	),
+	Terminal('endif')
+)
+
+// Conditional (ii)
+Diagram(
+	Comment('Conditional (ii)'),
+	Terminal('unless'),
+	OneOrMore(
+		Sequence(
+			NonTerminal('expression'),
+			Terminal('then'),
+			NonTerminal('sequence')
+		),
+		Choice(0,
+			Terminal('elseif'),
+			Terminal('elseunless')
+		)
+	),
+	Optional(
+		Sequence(
+			Terminal('else'),
+			NonTerminal('sequence')
+		),
+		'skip'
+	),
+	Terminal('endunless')
 )
 
 // Boolean expression
@@ -470,11 +517,9 @@ Diagram(
 // Operator expression
 Diagram(
 	Comment('Operator expression'),
-	Sequence(
-		NonTerminal('expression'),
-		NonTerminal('operator'),
-		NonTerminal('expression')
-	)
+	NonTerminal('expression'),
+	NonTerminal('operator'),
+	NonTerminal('expression')
 )
 
 // Function application
@@ -484,10 +529,16 @@ Diagram(
 		Sequence(
 			NonTerminal('expression'),
 			Terminal('('),
+			Optional(
+				NonTerminal('expression')
+			),
 			ZeroOrMore(
-				NonTerminal('expression'),
-				Terminal(','),
-				'skip'
+				Sequence(
+					Terminal(','),
+					Optional(
+						NonTerminal('expression')
+					)
+				)
 			),
 			Terminal(')')
 		),
