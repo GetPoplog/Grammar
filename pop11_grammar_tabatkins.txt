@@ -530,8 +530,9 @@ Diagram(
 			NonTerminal('expression'),
 			Terminal('('),
 			ZeroOrMore(
-				Optional('expression'),
-				Terminal(',')
+				Optional(NonTerminal('expression')),
+				Terminal(','),
+				'skip'
 			),
 			Terminal(')')
 		),
