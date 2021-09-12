@@ -341,7 +341,7 @@ Diagram(
 // Iterative (ii)
 Diagram(
 	Comment('Iterative (ii)'),
-	Terminal('while')),
+	Terminal('while'),
 	NonTerminal('expression'),
 	Terminal('do'),
 	NonTerminal('sequence'),
