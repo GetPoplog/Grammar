@@ -15,7 +15,7 @@ ALLOWED_NAMES = {
     "Optional": Optional,
     "ZeroOrMore": ZeroOrMore,
     "OneOrMore": OneOrMore,
-    "undefined": 'undefined'
+    "undefined": 'None'
 }
 
 def eval_expression(input_string, allowed_names = {}):
@@ -28,28 +28,30 @@ def eval_expression(input_string, allowed_names = {}):
 def parse_tabatkins_file():
     dump = []
     current = []
+    current_line_num = 1
     with open( 'pop11_grammar_tabatkins.txt', 'r' ) as file:
-        for line in file:
+        for (line_num, line) in enumerate( file ):
             if line.startswith('//'):
                 if current:
-                    dump.append( current )
+                    dump.append((current_line_num, current ))
+                    current_line_num = line_num
                     current = []
             else:
                 current.append( line )
         if current:
-            dump.append( current )
-    return map( lambda L: ''.join(L), dump )
+            dump.append((current_line_num, current ))
+    return map( lambda L: ( L[0], ''.join(L[1]) ), dump )
 
 def diagram2string( diag ):
     with io.StringIO() as buffer:
         diag.writeSvg(buffer.write)   
         return buffer.getvalue()
 
-def svg_list():
-    return [ 
-        { 'svg': diagram2string( eval_expression(diag_text, ALLOWED_NAMES) ) }
-        for diag_text in parse_tabatkins_file() 
-    ]
+def svg_items():
+    for ( line_num, diag_text ) in parse_tabatkins_file():
+        print( f'Parsing expression on line {line_num}', file=sys.stderr )
+        yield { 'svg': diagram2string( eval_expression(diag_text, ALLOWED_NAMES) ) }
+
 
 mustache_template = """
 <!DOCTYPE html>
@@ -119,7 +121,7 @@ svg.railroad-diagram g.diagram-text:hover path.diagram-text {
 """
 
 def print_tabatkins_grammar_as_html():
-    print( pymustache.render( mustache_template, { 'DIAGRAMS': svg_list() } ) )
+    print( pymustache.render( mustache_template, { 'DIAGRAMS': list( svg_items() ) } ) )
 
 if __name__ == "__main__":
     print_tabatkins_grammar_as_html()
