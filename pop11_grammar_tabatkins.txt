@@ -529,16 +529,9 @@ Diagram(
 		Sequence(
 			NonTerminal('expression'),
 			Terminal('('),
-			Optional(
-				NonTerminal('expression')
-			),
 			ZeroOrMore(
-				Sequence(
-					Terminal(','),
-					Optional(
-						NonTerminal('expression')
-					)
-				)
+				Optional('expression'),
+				Terminal(',')
 			),
 			Terminal(')')
 		),
