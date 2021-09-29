@@ -96,8 +96,8 @@ Iterative ::=
 	| 'repeat' (Expression 'times' | 'forever')? Sequence 'endrepeat'
 
 Conditional ::=
-	'if' Expression 'then' Sequence (('elseif' | 'elseunless') Expression 'then' Sequence)* ('else' Expression)? 'endif'
-	| 'unless' Expression 'then' Sequence (('elseif' | 'elseunless') Expression 'then' Sequence)* ('else' Expression)? 'endunless'
+	'if' Expression 'then' Sequence (('elseif' | 'elseunless') Expression 'then' Sequence)* ('else' Sequence)? 'endif'
+	| 'unless' Expression 'then' Sequence (('elseif' | 'elseunless') Expression 'then' Sequence)* ('else' Sequence)? 'endunless'
 
 BooleanExpression ::=
 	Expression (('and' | 'or') Expression)*
