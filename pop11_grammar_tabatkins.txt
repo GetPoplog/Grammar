@@ -7,6 +7,14 @@ Diagram(
 // Expression
 Diagram(
 	Comment('Expression'),
+	Optional(
+		NonTerminal('non empty expression')
+	)
+)
+
+// NonEmptyExpression
+Diagram(
+	Comment('NonEmptyExpression'),
 	Choice(0,
 		NonTerminal('literal'),
 		NonTerminal('constant expression'),
@@ -527,10 +535,10 @@ Diagram(
 	Comment('Function application'),
 	Choice(0,
 		Sequence(
-			NonTerminal('expression'),
+			NonTerminal('non empty expression'),
 			Terminal('('),
 			ZeroOrMore(
-				Optional(NonTerminal('expression')),
+				NonTerminal('expression'),
 				Terminal(','),
 				'skip'
 			),
