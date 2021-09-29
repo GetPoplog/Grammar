@@ -14,6 +14,7 @@ Expression ::=
 	| FunctionApplication
 	| Jump
 	| Label
+	| LoopExits
 	| '(' Sequence ')'
 
 ConstantExpression ::=
@@ -95,6 +96,10 @@ Iterative ::=
 Conditional ::=
 	'if' Expression 'then' Sequence (('elseif' | 'elseunless') Expression 'then' Sequence)* ('else' Sequence)? 'endif'
 	| 'unless' Expression 'then' Sequence (('elseif' | 'elseunless') Expression 'then' Sequence)* ('else' Sequence)? 'endunless'
+
+LoopExits ::=
+	('quitloop' | 'nextloop') ('(' Integer ')')?
+	| ('quitif' | 'quitunless' | 'nextif' | 'nextunless') '(' Expression ')' ('(' Integer ')')?
 
 BooleanExpression ::=
 	Expression (('and' | 'or') Expression)*

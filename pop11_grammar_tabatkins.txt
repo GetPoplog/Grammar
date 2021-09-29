@@ -21,6 +21,7 @@ Diagram(
 		NonTerminal('function application'),
 		NonTerminal('jump'),
 		NonTerminal('label'),
+		NonTerminal('loop exits'),
 		Sequence(
 			Terminal('('),
 			NonTerminal('sequence'),
@@ -500,6 +501,44 @@ Diagram(
 		'skip'
 	),
 	Terminal('endunless')
+)
+
+// LoopExits
+Diagram(
+	Comment('LoopExits'),
+	Choice(0,
+		Sequence(
+			Choice(0,
+				Terminal('quitloop'),
+				Terminal('nextloop')
+			),
+			Optional(
+				Sequence(
+					Terminal('('),
+					NonTerminal('integer'),
+					Terminal(')')
+				)
+			)
+		),
+		Sequence(
+			Choice(0,
+				Terminal('quitif'),
+				Terminal('quitunless'),
+				Terminal('nextif'),
+				Terminal('nextunless')
+			),
+			Terminal('('),
+			NonTerminal('expression'),
+			Terminal(')'),
+			Optional(
+				Sequence(
+					Terminal('('),
+					NonTerminal('integer'),
+					Terminal(')')
+				)
+			)
+		)
+	)
 )
 
 // Boolean expression
