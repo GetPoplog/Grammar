@@ -15,6 +15,7 @@ Expression ::=
 	| Jump
 	| Label
 	| '(' Sequence ')'
+	| Block
 
 ConstantExpression ::=
 	Construct
@@ -44,6 +45,8 @@ Varslist ::=
 
 Sequence ::=
 	(Expression (',' | ';' | '=>' | '==>'))+
+
+Block ::= 'lblock' Sequence 'endlblock'
 
 Literal ::=
 	Number
