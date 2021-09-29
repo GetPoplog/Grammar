@@ -25,7 +25,8 @@ Diagram(
 			Terminal('('),
 			NonTerminal('sequence'),
 			Terminal(')')
-		)
+		),
+		NonTerminal('block')
 	)
 )
 
@@ -192,6 +193,14 @@ Diagram(
 			Terminal('==>')
 		)
 	)
+)
+
+// Block
+Diagram(
+	Comment('Block'),
+	Terminal('lblock'),
+	NonTerminal('sequence'),
+	Terminal('endlblock')
 )
 
 // Literal
@@ -530,7 +539,9 @@ Diagram(
 			NonTerminal('expression'),
 			Terminal('('),
 			ZeroOrMore(
-				Optional(NonTerminal('expression')),
+				Optional(
+					NonTerminal('expression')
+				),
 				Terminal(','),
 				'skip'
 			),
