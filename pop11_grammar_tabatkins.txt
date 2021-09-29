@@ -89,7 +89,7 @@ Diagram(
 	Comment('Assignment'),
 	Choice(0,
 		Sequence(
-			NonTerminal('expression'),
+			NonTerminal('non empty expression'),
 			Choice(0,
 				Terminal('->'),
 				Terminal('->>')
@@ -100,9 +100,9 @@ Diagram(
 			)
 		),
 		Sequence(
-			NonTerminal('expression'),
+			NonTerminal('non empty expression'),
 			Terminal('-->'),
-			NonTerminal('expression')
+			NonTerminal('non empty expression')
 		)
 	)
 )
@@ -192,7 +192,7 @@ Diagram(
 Diagram(
 	Comment('Sequence'),
 	OneOrMore(
-		NonTerminal('expression'),
+		NonTerminal('non empty expression'),
 		Choice(0,
 			Terminal(','),
 			Terminal(';'),
@@ -336,11 +336,11 @@ Diagram(
 Diagram(
 	Comment('Iterative (i)'),
 	Terminal('for'),
-	NonTerminal('expression'),
+	NonTerminal('non empty expression'),
 	Terminal('step'),
-	NonTerminal('expression'),
+	NonTerminal('non empty expression'),
 	Terminal('till'),
-	NonTerminal('expression'),
+	NonTerminal('non empty expression'),
 	Terminal('do'),
 	NonTerminal('sequence'),
 	Terminal('endfor')
@@ -350,7 +350,7 @@ Diagram(
 Diagram(
 	Comment('Iterative (ii)'),
 	Terminal('while'),
-	NonTerminal('expression'),
+	NonTerminal('non empty expression'),
 	Terminal('do'),
 	NonTerminal('sequence'),
 	Terminal('endwhile')
@@ -360,7 +360,7 @@ Diagram(
 Diagram(
 	Comment('Iterative (iii)'),
 	Terminal('until'),
-	NonTerminal('expression'),
+	NonTerminal('non empty expression'),
 	Terminal('do'),
 	NonTerminal('sequence'),
 	Terminal('enduntil')
@@ -380,11 +380,11 @@ Diagram(
 			Optional(
 				Sequence(
 					Terminal('from'),
-					NonTerminal('expression'),
+					NonTerminal('non empty expression'),
 					Optional(
 						Sequence(
 							Terminal('by'),
-							NonTerminal('expression')
+							NonTerminal('non empty expression')
 						),
 						'skip'
 					)
@@ -394,7 +394,7 @@ Diagram(
 			Terminal('to')
 		)
 	),
-	NonTerminal('expression'),
+	NonTerminal('non empty expression'),
 	Terminal('do'),
 	NonTerminal('sequence'),
 	Terminal('endfor')
@@ -406,7 +406,7 @@ Diagram(
 	Terminal('for'),
 	NonTerminal('word'),
 	Terminal('from_repeater'),
-	NonTerminal('expression'),
+	NonTerminal('non empty expression'),
 	Terminal('do'),
 	NonTerminal('sequence'),
 	Terminal('endfor')
@@ -416,11 +416,11 @@ Diagram(
 Diagram(
 	Comment('Iterative (vi)'),
 	Terminal('foreach'),
-	NonTerminal('expression'),
+	NonTerminal('non empty expression'),
 	Optional(
 		Sequence(
 			Terminal('in'),
-			NonTerminal('expression')
+			NonTerminal('non empty expression')
 		)
 	),
 	Terminal('do'),
@@ -432,11 +432,11 @@ Diagram(
 Diagram(
 	Comment('Iterative (vii)'),
 	Terminal('forevery'),
-	NonTerminal('expression'),
+	NonTerminal('non empty expression'),
 	Optional(
 		Sequence(
 			Terminal('in'),
-			NonTerminal('expression')
+			NonTerminal('non empty expression')
 		)
 	),
 	Terminal('do'),
@@ -451,7 +451,7 @@ Diagram(
 	Choice(0,
 		Skip(),
 		Sequence(
-			NonTerminal('expression'),
+			NonTerminal('non empty expression'),
 			Terminal('times')
 		),
 		Terminal('forever')
@@ -466,7 +466,7 @@ Diagram(
 	Terminal('if'),
 	OneOrMore(
 		Sequence(
-			NonTerminal('expression'),
+			NonTerminal('non empty expression'),
 			Terminal('then'),
 			NonTerminal('sequence')
 		),
@@ -491,7 +491,7 @@ Diagram(
 	Terminal('unless'),
 	OneOrMore(
 		Sequence(
-			NonTerminal('expression'),
+			NonTerminal('non empty expression'),
 			Terminal('then'),
 			NonTerminal('sequence')
 		),
@@ -514,7 +514,7 @@ Diagram(
 Diagram(
 	Comment('Boolean expression'),
 	OneOrMore(
-		NonTerminal('expression'),
+		NonTerminal('non empty expression'),
 		Choice(0,
 			Terminal('and'),
 			Terminal('or')
@@ -525,9 +525,9 @@ Diagram(
 // Operator expression
 Diagram(
 	Comment('Operator expression'),
-	NonTerminal('expression'),
+	NonTerminal('non empty expression'),
 	NonTerminal('operator'),
-	NonTerminal('expression')
+	NonTerminal('non empty expression')
 )
 
 // Function application
@@ -546,7 +546,7 @@ Diagram(
 		),
 		Sequence(
 			Terminal('.'),
-			NonTerminal('expression')
+			NonTerminal('non empty expression')
 		)
 	)
 )
