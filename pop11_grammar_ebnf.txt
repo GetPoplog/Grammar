@@ -1,6 +1,10 @@
-Grammar ::= Expression
+Grammar ::=
+	Expression
 
-Expression ::= 
+Expression ::=
+	NonEmptyExpression?
+
+NonEmptyExpression ::=
 	Literal
 	| ConstantExpression
 	| Variable
@@ -111,5 +115,5 @@ OperatorExpression ::=
 	Expression Operator Expression
 
 FunctionApplication ::=
-	Expression '(' Expression? (',' Expression?)* ')'
+	NonEmptyExpression '(' Expression (',' Expression)* ')'
 	| '.' Expression
