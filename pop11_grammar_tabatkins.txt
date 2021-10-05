@@ -512,22 +512,13 @@ Diagram(
 	Terminal('endunless')
 )
 
-// LoopExits
+// Loop exits
 Diagram(
-	Comment('LoopExits'),
+	Comment('Loop exits'),
 	Choice(0,
-		Sequence(
-			Choice(0,
-				Terminal('quitloop'),
-				Terminal('nextloop')
-			),
-			Optional(
-				Sequence(
-					Terminal('('),
-					NonTerminal('integer'),
-					Terminal(')')
-				)
-			)
+		Choice(0,
+			Terminal('quitloop'),
+			Terminal('nextloop')
 		),
 		Sequence(
 			Choice(0,
@@ -538,15 +529,16 @@ Diagram(
 			),
 			Terminal('('),
 			NonTerminal('expression'),
-			Terminal(')'),
-			Optional(
-				Sequence(
-					Terminal('('),
-					NonTerminal('integer'),
-					Terminal(')')
-				)
-			)
+			Terminal(')')
 		)
+	),
+	Optional(
+		Sequence(
+			Terminal('('),
+			NonTerminal('integer'),
+			Terminal(')')
+		),
+		'skip'
 	)
 )
 
