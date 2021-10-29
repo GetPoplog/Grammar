@@ -31,8 +31,8 @@ Definition ::=
 	'define' Word ('(' Varslist? ')' | Varslist)? ('->' Varslist)* ';' Sequence 'enddefine'
 
 Assignment ::=
-	NonEmptyExpression ('->' | '->>') (Variable | FunctionApplication)
-	| NonEmptyExpression '-->' NonEmptyExpression
+	Expression ('->' | '->>') (Variable | FunctionApplication)
+	| Expression '-->' Expression
 
 Variable ::=
 	Word
@@ -49,7 +49,7 @@ Varslist ::=
 	(','* ('procedure' | 'macro' | 'syntax' | Number)? Word)+
 
 Sequence ::=
-	(NonEmptyExpression (',' | ';' | '=>' | '==>'))+
+	(Expression (',' | ';' | '=>' | '==>'))+
 
 Block ::= 'lblock' Sequence 'endlblock'
 
@@ -91,25 +91,25 @@ Jump ::=
 	'goto' Word
 
 Iterative ::=
-	'for' NonEmptyExpression 'step' NonEmptyExpression 'till' NonEmptyExpression 'do' Sequence 'endfor'
-	| 'while' NonEmptyExpression 'do' Sequence 'endwhile'
-	| 'until' NonEmptyExpression 'do' Sequence 'enduntil'
-	| 'for' Word (('in' | 'on') | ('from' NonEmptyExpression ('by' NonEmptyExpression)?)? 'to') NonEmptyExpression 'do' Sequence 'endfor'
-	| 'for' Word 'from_repeater' NonEmptyExpression 'do' Sequence 'endfor'
-	| 'foreach' NonEmptyExpression ('in' NonEmptyExpression)? 'do' Sequence 'endforeach'
-	| 'forevery' NonEmptyExpression ('in' NonEmptyExpression)? 'do' Sequence 'endforevery'
-	| 'repeat' (NonEmptyExpression 'times' | 'forever')? Sequence 'endrepeat'
+	'for' Expression 'step' Expression 'till' Expression 'do' Sequence 'endfor'
+	| 'while' Expression 'do' Sequence 'endwhile'
+	| 'until' Expression 'do' Sequence 'enduntil'
+	| 'for' Variable (('in' | 'on') | ('from' Expression ('by' NonEmptyExpression)?)? 'to') Expression 'do' Sequence 'endfor'
+	| 'for' Variable 'from_repeater' Expression 'do' Sequence 'endfor'
+	| 'foreach' Pattern ('in' Expression)? 'do' Sequence 'endforeach'
+	| 'forevery' PatternConstruct ('in' Expression)? 'do' Sequence 'endforevery'
+	| 'repeat' (Expression 'times' | 'forever')? Sequence 'endrepeat'
 
 Conditional ::=
-	'if' NonEmptyExpression 'then' Sequence (('elseif' | 'elseunless') NonEmptyExpression 'then' Sequence)* ('else' NonEmptyExpression)? 'endif'
-	| 'unless' NonEmptyExpression 'then' Sequence (('elseif' | 'elseunless') NonEmptyExpression 'then' Sequence)* ('else' NonEmptyExpression)? 'endunless'
+	'if' Expression 'then' Sequence (('elseif' | 'elseunless') Expression 'then' Sequence)* ('else' Sequence)? 'endif'
+	| 'unless' Expression 'then' Sequence (('elseif' | 'elseunless') Expression 'then' Sequence)* ('else' Sequence)? 'endunless'
 
 BooleanExpression ::=
-	NonEmptyExpression (('and' | 'or') NonEmptyExpression)*
+	Expression (('and' | 'or') Expression)*
 
 OperatorExpression ::=
-	NonEmptyExpression Operator NonEmptyExpression
+	Expression Operator Expression
 
 FunctionApplication ::=
 	NonEmptyExpression '(' Expression (',' Expression)* ')'
-	| '.' NonEmptyExpression
+	| Expression '.' Expression
