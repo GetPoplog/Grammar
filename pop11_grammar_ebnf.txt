@@ -31,8 +31,8 @@ Definition ::=
 	'define' Word ('(' Varslist? ')' | Varslist)? ('->' Varslist)* ';' Sequence 'enddefine'
 
 Assignment ::=
-	Expression ('->' | '->>') (Variable | FunctionApplication)
-	| Expression '-->' Expression
+	NonEmptyExpression ('->' | '->>') (Variable | FunctionApplication)
+	| NonEmptyExpression '-->' NonEmptyExpression
 
 Variable ::=
 	Word
@@ -49,7 +49,7 @@ Varslist ::=
 	(','* ('procedure' | 'macro' | 'syntax' | Number)? Word)+
 
 Sequence ::=
-	(Expression (',' | ';' | '=>' | '==>'))+
+	(NonEmptyExpression (',' | ';' | '=>' | '==>'))+
 
 Block ::= 'lblock' Sequence 'endlblock'
 
@@ -105,10 +105,10 @@ Conditional ::=
 	| 'unless' Expression 'then' Sequence (('elseif' | 'elseunless') Expression 'then' Sequence)* ('else' Sequence)? 'endunless'
 
 BooleanExpression ::=
-	Expression (('and' | 'or') Expression)*
+	NonEmptyExpression (('and' | 'or') NonEmptyExpression)*
 
 OperatorExpression ::=
-	Expression Operator Expression
+	NonEmptyExpression Operator NonEmptyExpression
 
 FunctionApplication ::=
 	NonEmptyExpression '(' Expression (',' Expression)* ')'
