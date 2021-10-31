@@ -1,6 +1,10 @@
-Grammar ::= Expression
+Grammar ::=
+	Expression
 
-Expression ::= 
+Expression ::=
+	NonEmptyExpression?
+
+NonEmptyExpression ::=
 	Literal
 	| ConstantExpression
 	| Variable
@@ -90,19 +94,15 @@ Iterative ::=
 	'for' Expression 'step' Expression 'till' Expression 'do' Sequence 'endfor'
 	| 'while' Expression 'do' Sequence 'endwhile'
 	| 'until' Expression 'do' Sequence 'enduntil'
-	| 'for' Word (('in' | 'on') | ('from' Expression ('by' Expression)?)? 'to') Expression 'do' Sequence 'endfor'
-	| 'for' Word 'from_repeater' Expression 'do' Sequence 'endfor'
-	| 'foreach' Expression ('in' Expression)? 'do' Sequence 'endforeach'
-	| 'forevery' Expression ('in' Expression)? 'do' Sequence 'endforevery'
+	| 'for' Variable (('in' | 'on') | ('from' Expression ('by' NonEmptyExpression)?)? 'to') Expression 'do' Sequence 'endfor'
+	| 'for' Variable 'from_repeater' Expression 'do' Sequence 'endfor'
+	| 'foreach' Pattern ('in' Expression)? 'do' Sequence 'endforeach'
+	| 'forevery' PatternConstruct ('in' Expression)? 'do' Sequence 'endforevery'
 	| 'repeat' (Expression 'times' | 'forever')? Sequence 'endrepeat'
 
 Conditional ::=
 	'if' Expression 'then' Sequence (('elseif' | 'elseunless') Expression 'then' Sequence)* ('else' Sequence)? 'endif'
 	| 'unless' Expression 'then' Sequence (('elseif' | 'elseunless') Expression 'then' Sequence)* ('else' Sequence)? 'endunless'
-
-LoopExits ::=
-	('quitloop' | 'nextloop') ('(' Integer ')')?
-	| ('quitif' | 'quitunless' | 'nextif' | 'nextunless') '(' Expression ')' ('(' Integer ')')?
 
 BooleanExpression ::=
 	Expression (('and' | 'or') Expression)*
@@ -111,5 +111,5 @@ OperatorExpression ::=
 	Expression Operator Expression
 
 FunctionApplication ::=
-	Expression '(' Expression? (',' Expression?)* ')'
-	| '.' Expression
+	NonEmptyExpression '(' Expression (',' Expression)* ')'
+	| Expression '.' Expression
