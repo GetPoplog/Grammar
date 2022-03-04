@@ -19,6 +19,7 @@ NonEmptyExpression ::=
 	| Jump
 	| Label
 	| LoopExits
+	| ReturnExpression
 	| '(' Sequence ')'
 	| Block
 
@@ -107,6 +108,10 @@ Conditional ::=
 LoopExits ::=
 	('quitloop' | 'nextloop') ('(' Integer ')')?
 	| ('quitif' | 'quitunless' | 'nextif' | 'nextunless') '(' Expression ')' ('(' Integer ')')?
+
+ReturnExpression ::=
+	'return' '(' Sequence ')' 
+	| ('returnif' | 'returnunless') '(' Expression ')' '(' Sequence  ')'
 
 BooleanExpression ::=
 	Expression (('and' | 'or') Expression)*

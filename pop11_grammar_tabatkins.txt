@@ -30,6 +30,7 @@ Diagram(
 		NonTerminal('jump'),
 		NonTerminal('label'),
 		NonTerminal('loop exits'),
+		NonTerminal('return expression'),
 		Sequence(
 			Terminal('('),
 			NonTerminal('sequence'),
@@ -547,6 +548,28 @@ Diagram(
 			Terminal(')')
 		),
 		'skip'
+	)
+)
+
+// Return expression
+Diagram(
+	Comment('Return expression'),
+	Choice(0,
+		Terminal('return'),
+		Sequence(
+			Choice(0,
+				Terminal('returnif'),
+				Terminal('returnunless')
+			),
+			Terminal('('),
+			NonTerminal('expression'),
+			Terminal(')')
+		)
+	),
+	Sequence(
+		Terminal('('),
+		NonTerminal('sequence'),
+		Terminal(')')
 	)
 )
 
