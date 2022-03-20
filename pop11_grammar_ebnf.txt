@@ -110,8 +110,8 @@ LoopExits ::=
 	| ('quitif' | 'quitunless' | 'nextif' | 'nextunless') '(' Expression ')' ('(' Integer ')')?
 
 ReturnExpression ::=
-	'return' '(' Sequence ')' 
-	| ('returnif' | 'returnunless') '(' Expression ')' '(' Sequence  ')'
+	'return' ( '(' Sequence ')' )?
+	| ('returnif' | 'returnunless') '(' Expression ')' ( '(' Sequence  ')' )?
 
 BooleanExpression ::=
 	Expression (('and' | 'or') Expression)*

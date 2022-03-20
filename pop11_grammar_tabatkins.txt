@@ -566,10 +566,12 @@ Diagram(
 			Terminal(')')
 		)
 	),
-	Sequence(
-		Terminal('('),
-		NonTerminal('sequence'),
-		Terminal(')')
+	Optional(
+		Sequence(
+			Terminal('('),
+			NonTerminal('sequence'),
+			Terminal(')')
+		)
 	)
 )
 
