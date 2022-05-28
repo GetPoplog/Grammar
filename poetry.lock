@@ -1,0 +1,29 @@
+[[package]]
+name = "pymustache"
+version = "0.3"
+description = "Mustache template engine in python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "railroad-diagrams"
+version = "1.1.1"
+description = "Generate SVG railroad syntax diagrams, like on JSON.org."
+category = "main"
+optional = false
+python-versions = "*"
+
+[metadata]
+lock-version = "1.1"
+python-versions = "^3.9"
+content-hash = "6905fc34c7dc6c73c4427dae5b3c9c8faa392d65415041026299863d68bd09a3"
+
+[metadata.files]
+pymustache = [
+    {file = "pymustache-0.3.tar.gz", hash = "sha256:84b87f00b1aaf9c67974f7707dc016177c625d69d1d91de12b0dd59b27269548"},
+]
+railroad-diagrams = [
+    {file = "railroad-diagrams-1.1.1.tar.gz", hash = "sha256:8a1ec227666be2000e76794aa740f77987f1586077aae4d090d2633b3064c976"},
+    {file = "railroad_diagrams-1.1.1-py3-none-any.whl", hash = "sha256:7e3f793e2edec50547f99dfbe031797ce322113f54bdefbcb7ea07c0eb7834d5"},
+]

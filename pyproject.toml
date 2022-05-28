@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "tabatkins2html"
+version = "0.1.0"
+description = "Visualisation of the Tabatkins grammar"
+authors = ["Stephen Leach <sfkleach@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+railroad-diagrams = "^1.1.1"
+pymustache = "^0.3"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
