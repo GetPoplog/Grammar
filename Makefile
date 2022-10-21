@@ -32,16 +32,25 @@ endif
 .PHONY: help
 help:
 	# Valid targets are:
+	#   build       Creates tabatkins grammar & itemisation grammar
 	#	show		Shows the tabatkins grammar in a browser			
 	#	clean		Removes artefacts
 
 .PHONY: show
-show: tabatkins.html
+show: _build/tabatkins.html
 	$(OPEN) $^
 
 .PHONY: clean
 clean:
-	rm -f tabatkins.html
+	rm -rf _build
 
-tabatkins.html: tabatkins2html.py pop11_grammar_tabatkins.txt
+.PHONY: build
+build: _build/tabatkins.html _build/itemisation_grammar_ebnf.txt
+
+_build/tabatkins.html: tabatkins2html.py pop11_grammar_tabatkins.txt
+	mkdir -p _build
 	poetry run python3 tabatkins2html.py > $@
+
+_build/itemisation_grammar_ebnf.txt: itemisation_grammar_ebnf.py
+	mkdir -p _build
+	poetry run python3 itemisation_grammar_ebnf.py > $@
