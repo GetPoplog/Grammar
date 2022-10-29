@@ -27,9 +27,9 @@ AlphaChar ::= [A-Za-z]
 NumChar ::= [0-9]
 AlnumChar ::= AlphaChar | NumChar
 
-/******************************************************************************\
+/*******************************************************************************
 | Decimal Numbers
-\******************************************************************************/
+\*******************************************************************************
 
 DecimalNumber ::= DecimalInteger | DecimalRatio | DecimalFloatingPoint
 
@@ -46,9 +46,9 @@ UnsignedDecimalFloatingPoint ::= UnsignedDecimalInteger '.' NumChar+ ( [esd] '-'
 DecimalComplexNumber ::= '_'? UnsignedDecimalReal ('_+:'|'_-:') UnsignedDecimalReal
 UnsignedDecimalReal ::= UnsignedDecimalInteger | UnsignedDecimalRatio | UnsignedDecimalFloatingPoint
 
-/******************************************************************************\
+/*******************************************************************************
 | Other Radix Numbers
-\******************************************************************************/
+\*******************************************************************************
 
 RadixNumber ::= { ' | '.join( f"Radix{i}Number" for i in range(2, 36+1) ) }
 RadixIntegerCore ::= { ' | '.join( f"Radix{i}IntegerCore" for i in range(2, 36+1) ) }
@@ -57,9 +57,9 @@ RadixIntegerCore ::= { ' | '.join( f"Radix{i}IntegerCore" for i in range(2, 36+1
 
 
 RADIX_TEMPLATE = """
-/******************************************************************************\
+/*******************************************************************************
 | Radix{0}Numbers
-\******************************************************************************/
+\*******************************************************************************
 
 Radix{0}Number ::= Radix{0}Integer | Radix{0}Ratio | Radix{0}FloatingPoint | Radix{0}ComplexNumber
 
