@@ -22,11 +22,15 @@ NonEmptyExpression ::=
 	| ReturnExpression
 	| '(' Sequence ')'
 	| Block
+	| IdentExpression
+
+IdentExpression ::= 'ident' Word
 
 ConstantExpression ::=
 	Construct
 	| '"' Word '"'
 	| '"' String '"'
+	| '"' IdentExpression '"'
 
 Definition ::=
 	'define' Word ('(' Varslist? ')' | Varslist)? ('->' Varslist)* ';' Sequence 'enddefine'

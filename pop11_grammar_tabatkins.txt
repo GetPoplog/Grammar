@@ -36,7 +36,8 @@ Diagram(
 			NonTerminal('sequence'),
 			Terminal(')')
 		),
-		NonTerminal('block')
+		NonTerminal('block'),
+		NonTerminal('ident expression')
 	)
 )
 
@@ -53,6 +54,11 @@ Diagram(
 		Sequence(
 			Terminal('"'),
 			NonTerminal('string'),
+			Terminal('"')
+		),
+		Sequence(
+			Terminal('"'),
+			NonTerminal('ident expression'),
 			Terminal('"')
 		)
 	)
