@@ -41,6 +41,13 @@ Diagram(
 	)
 )
 
+// Ident expression
+Diagram(
+	Comment('Ident expression'),
+	Terminal('ident'),
+	NonTerminal('word')
+)
+
 // Constant expression
 Diagram(
 	Comment('Constant expression'),
