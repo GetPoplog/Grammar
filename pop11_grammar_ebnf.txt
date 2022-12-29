@@ -23,6 +23,9 @@ NonEmptyExpression ::=
 	| '(' Sequence ')'
 	| Block
 	| IdentExpression
+	| CountedSequence
+
+CountedSequence ::= '#|' Sequence '|#'
 
 IdentExpression ::= 'ident' Word
 
