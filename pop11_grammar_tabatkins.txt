@@ -37,8 +37,17 @@ Diagram(
 			Terminal(')')
 		),
 		NonTerminal('block'),
-		NonTerminal('ident expression')
+		NonTerminal('ident expression'),
+		NonTerminal('counted sequence')
 	)
+)
+
+// Counted sequence
+Diagram(
+	Comment('Counted sequence'),
+	Terminal('#|'),
+	NonTerminal('sequence'),
+	Terminal('|#')
 )
 
 // Ident expression
