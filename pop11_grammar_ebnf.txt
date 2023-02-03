@@ -24,6 +24,9 @@ NonEmptyExpression ::=
 	| Block
 	| IdentExpression
 	| CountedSequence
+	| ConsWith
+
+ConsWith ::= 'cons_with' Expression VectorConstruct
 
 CountedSequence ::= '#|' Sequence '|#'
 

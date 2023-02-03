@@ -38,8 +38,17 @@ Diagram(
 		),
 		NonTerminal('block'),
 		NonTerminal('ident expression'),
-		NonTerminal('counted sequence')
+		NonTerminal('counted sequence'),
+		NonTerminal('cons with')
 	)
+)
+
+// Cons with
+Diagram(
+	Comment('Cons with'),
+	Terminal('cons_with'),
+	NonTerminal('expression'),
+	NonTerminal('vector construct')
 )
 
 // Counted sequence
