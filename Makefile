@@ -32,20 +32,40 @@ endif
 .PHONY: help
 help:
 	# Valid targets are:
+	#   setup		One-time setup to poetry install & download *.war
 	#   build       Creates tabatkins grammar & itemisation grammar
 	#	show		Shows the tabatkins grammar in a browser			
 	#	clean		Removes artefacts
+	#   deepclean	In addition to normal cleaning removes tools
 
 .PHONY: show
 show: _build/tabatkins.html
 	$(OPEN) $^
 
+.PHONY: setup
+setup: _buildtools/railroad/rr.war
+	poetry install
+
+_buildtools/railroad/rr.war: _buildtools/railroad/rr-1.67-java8.zip
+	mkdir -p _buildtools/rr
+	( cd _buildtools/railroad; unzip -o ../railroad/rr-1.67-java8.zip )
+	rm -f _buildtools/rr-1.67-java8.zip
+
+_buildtools/railroad/rr-1.67-java8.zip:
+	mkdir -p _buildtools/railroad/
+	curl https://bottlecaps.de/rr/download/rr-1.67-java8.zip > $@
+
+
 .PHONY: clean
 clean:
 	rm -rf _build
 
+.PHONY: deepclean
+deepclean: clean
+	rm -rf _buildtools
+
 .PHONY: build
-build: _build/tabatkins.html _build/itemisation_grammar_ebnf.txt
+build: _build/tabatkins.html _build/itemisation_grammar_ebnf.txt _build/pop11_grammar_ebnf.html
 
 _build/tabatkins.html: tabatkins2html.py pop11_grammar_tabatkins.txt
 	mkdir -p _build
@@ -54,3 +74,7 @@ _build/tabatkins.html: tabatkins2html.py pop11_grammar_tabatkins.txt
 _build/itemisation_grammar_ebnf.txt: itemisation_grammar_ebnf.py
 	mkdir -p _build
 	poetry run python3 itemisation_grammar_ebnf.py > $@
+
+_build/pop11_grammar_ebnf.html: _buildtools/railroad/rr.war
+	mkdir -p _build
+	java -jar _buildtools/railroad/rr.war pop11_grammar_ebnf.txt > $@
