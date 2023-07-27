@@ -25,6 +25,11 @@ NonEmptyExpression ::=
 	| IdentExpression
 	| CountedSequence
 	| ConsWith
+	| Section
+
+Section ::= 'section' (SectionName Word* ('=>' Word+)?)? ';' Sequence 'endsection'
+
+SectionName ::= Word | Word? ('$-' Word)+
 
 ConsWith ::= 'cons_with' Expression VectorConstruct
 
