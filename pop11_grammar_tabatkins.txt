@@ -39,7 +39,55 @@ Diagram(
 		NonTerminal('block'),
 		NonTerminal('ident expression'),
 		NonTerminal('counted sequence'),
-		NonTerminal('cons with')
+		NonTerminal('cons with'),
+		NonTerminal('section')
+	)
+)
+
+// Section
+Diagram(
+	Comment('Section'),
+	Terminal('section'),
+	Optional(
+		Sequence(
+			NonTerminal('section name'),
+			ZeroOrMore(
+				NonTerminal('word'),
+				undefined,
+				'skip'
+			),
+			Optional(
+				Sequence(
+					Terminal('=>'),
+					OneOrMore(
+						NonTerminal('word')
+					)
+				)
+			)
+		)
+	),
+	Terminal(';'),
+	NonTerminal('sequence'),
+	Terminal('endsection')
+)
+
+// Section name
+Diagram(
+	Comment('Section name'),
+	Choice(0,
+		NonTerminal('word'),
+		Sequence(
+			Optional(
+				NonTerminal('word'),
+				'skip'
+			),
+			OneOrMore(
+				Sequence(
+					Terminal('$-'),
+					NonTerminal('word')
+				)
+			)
+		)
 	)
 )
 
