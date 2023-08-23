@@ -166,6 +166,28 @@ Diagram(
 	Terminal('enddefine')
 )
 
+// Varslist
+Diagram(
+	Comment('Varslist'),
+	OneOrMore(
+		Sequence(
+			ZeroOrMore(
+				Terminal(','),
+				undefined,
+				'skip'
+			),
+			Choice(0,
+				Skip(),
+				Terminal('procedure'),
+				Terminal('macro'),
+				Terminal('syntax'),
+				NonTerminal('number')
+			),
+			NonTerminal('word')
+		)
+	)
+)
+
 // Assignment
 Diagram(
 	Comment('Assignment'),
@@ -212,62 +234,116 @@ Diagram(
 // Declaration
 Diagram(
 	Comment('Declaration'),
+	Sequence(
+		NonTerminal('declaration kind'),
+		NonTerminal('declaration list')
+	)
+)
+
+// Declaration kind
+Diagram(
+	Comment('Declaration kind'),
 	Choice(0,
 		Sequence(
 			Optional(
-				Terminal('global'),
+				Choice(0,
+					Terminal('global'),
+					Terminal('nonglobal')
+				),
 				'skip'
 			),
 			Choice(0,
+				Terminal('constant'),
 				Terminal('vars'),
-				Terminal('constant')
-			),
-			NonTerminal('varslist'),
-			Terminal(';')
+			)
 		),
-		Sequence(
-			Terminal('lvars'),
-			OneOrMore(
-				Choice(0,
-					Terminal(','),
-					NonTerminal('word')
-				)
-			),
-			Terminal(';')
-		),
-		Sequence(
-			Terminal('dlocal'),
-			OneOrMore(
-				Choice(0,
-					Terminal(','),
-					NonTerminal('word')
-				)
-			),
-			Terminal(';')
-		)
-	)	
+		Terminal('iconstant'),
+		Terminal('lconstant'),
+		Terminal('dlvars'),
+		Terminal('lvars')
+	)
 )
 
-// Varslist
+// Declaration list
 Diagram(
-	Comment('Varslist'),
-	OneOrMore(
-		Sequence(
-			ZeroOrMore(
-				Terminal(','),
-				undefined,
-				'skip'
+	Comment('Declaration list'),
+	Sequence(
+		OneOrMore(
+			NonTerminal('single declaration'),
+			Terminal(',')
+		),
+		Terminal(';')
+	)
+)
+
+// Single declaration
+Diagram(
+	Comment('Single declaration'),
+	Sequence(
+		Optional(
+			NonTerminal('attribute'),
+			'skip'
+		),
+		NonTerminal('word'),
+		Optional(
+			Sequence(
+				Terminal('='),
+				NonTerminal('expression')
 			),
-			Choice(0,
-				Skip(),
-				Terminal('procedure'),
-				Terminal('macro'),
-				Terminal('syntax'),
-				NonTerminal('number')
-			),
-			NonTerminal('word')
+			'skip'
 		)
 	)
+)
+
+// Attribute
+Diagram(
+	Comment('Attribute'),
+	Choice(0,
+		NonTerminal('ident props'),
+		Sequence(
+			Terminal('active'),
+			Optional(
+				Sequence(
+					Terminal(':'),
+					NonTerminal('multiplicity')
+				),
+				'skip'
+			),
+			Optional(
+				NonTerminal('ident props'),
+				'skip'
+			)
+		)
+	)
+)
+
+// Ident props
+Diagram(
+	Comment('Ident props'),
+	Choice(0,
+		Terminal('procedure'),
+		Terminal('macro'),
+		Sequence(
+			Terminal('syntax'),
+			Optional(
+				NonTerminal('precedence'),
+				'skip'
+			)
+		),
+		NonTerminal('precedence')
+	)
+)
+
+// Multiplicity
+Diagram(
+	Comment('Multiplicity'),
+	NonTerminal('number') // 0 .. 255
+)
+
+// Precedence
+Diagram(
+	Comment('Precedence'),
+	NonTerminal('number') // -12.7 .. 12.7
 )
 
 // Sequence

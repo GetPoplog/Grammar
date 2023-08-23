@@ -27,15 +27,21 @@ NonEmptyExpression ::=
 	| ConsWith
 	| Section
 
-Section ::= 'section' (SectionName Word* ('=>' Word+)?)? ';' Sequence 'endsection'
+Section ::=
+	'section' (SectionName Word* ('=>' Word+)?)? ';' Sequence 'endsection'
 
-SectionName ::= Word | Word? ('$-' Word)+
+SectionName ::=
+	Word
+	| Word? ('$-' Word)+
 
-ConsWith ::= 'cons_with' Expression VectorConstruct
+ConsWith ::=
+	'cons_with' Expression VectorConstruct
 
-CountedSequence ::= '#|' Sequence '|#'
+CountedSequence ::=
+	'#|' Sequence '|#'
 
-IdentExpression ::= 'ident' Word
+IdentExpression ::=
+	'ident' Word
 
 ConstantExpression ::=
 	Construct
@@ -45,6 +51,9 @@ ConstantExpression ::=
 
 Definition ::=
 	'define' Word ('(' Varslist? ')' | Varslist)? ('->' Varslist)* ';' Sequence 'enddefine'
+
+Varslist ::=
+	(','* ('procedure' | 'macro' | 'syntax' | Number)? Word)+
 
 Assignment ::=
 	Expression ('->' | '->>') (Variable | FunctionApplication)
@@ -57,12 +66,36 @@ Variable ::=
 	| 'nonsyntax' SyntaxWord
 
 Declaration ::=
-	'global'? ('vars' | 'constant') Varslist ';'
-	| 'lvars' (',' | Word)+ ';'
-	| 'dlocal' (',' | Word)+ ';'
+	DeclarationKind DeclarationList
 
-Varslist ::=
-	(','* ('procedure' | 'macro' | 'syntax' | Number)? Word)+
+DeclarationKind ::=
+	('global' | 'nonglobal')? ('constant' | 'vars')
+	| 'iconstant'
+	| 'lconstant'
+	| 'dlvars'
+	| 'lvars'
+
+DeclarationList ::=
+	SingleDeclaration (',' SingleDeclaration)* ';'
+
+SingleDeclaration ::=
+	Attribute? Word ('=' Expression)?
+
+Attribute ::=
+	IdentProps
+	| 'active' (':' Multiplicity)? IdentProps?
+
+IdentProps ::=
+	'procedure'
+	| 'macro'
+	| 'syntax' Precedence?
+	| Precedence
+
+Multiplicity ::=
+	Number // 0 .. 255
+
+Precedence ::=
+	Number // -12.7 .. 12.7
 
 Sequence ::=
 	(Expression (',' | ';' | '=>' | '==>'))+
