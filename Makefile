@@ -34,8 +34,8 @@ help:
 	# Valid targets are:
 	#   setup		One-time setup to poetry install & download *.war
 	#   build       Creates tabatkins grammar & itemisation grammar
-	#	show		Shows the tabatkins grammar in a browser			
-	#	clean		Removes artefacts
+	#   show		Shows the tabatkins grammar in a browser			
+	#   clean		Removes artefacts
 	#   deepclean	In addition to normal cleaning removes tools
 
 .PHONY: show
@@ -46,14 +46,14 @@ show: _build/tabatkins.html
 setup: _buildtools/railroad/rr.war
 	poetry install
 
-_buildtools/railroad/rr.war: _buildtools/railroad/rr-1.67-java8.zip
-	mkdir -p _buildtools/rr
-	( cd _buildtools/railroad; unzip -o ../railroad/rr-1.67-java8.zip )
-	rm -f _buildtools/rr-1.67-java8.zip
+_buildtools/railroad/rr.war: _buildtools/railroad/rr-2.0-java11.zip
+	mkdir -p _buildtools/railroad
+	( cd _buildtools/railroad; unzip -o rr-2.0-java11.zip)
+	rm -f _buildtools/rr-2.0-java8.zip
 
-_buildtools/railroad/rr-1.67-java8.zip:
+_buildtools/railroad/rr-2.0-java11.zip:
 	mkdir -p _buildtools/railroad/
-	curl https://bottlecaps.de/rr/download/rr-1.67-java8.zip > $@
+	curl https://bottlecaps.de/rr/download/rr-2.0-java11.zip > $@
 
 
 .PHONY: clean
