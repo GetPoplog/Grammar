@@ -2,6 +2,7 @@ from railroad import Diagram, Choice, Comment, NonTerminal, Sequence, Terminal, 
 import sys
 import pymustache
 import io
+import re
 
 ALLOWED_NAMES = {
     "Comment": Comment,
@@ -36,6 +37,9 @@ def parse_tabatkins_file():
                     dump.append((current_line_num, current ))
                     current_line_num = line_num
                     current = []
+            m = re.match( '''(.*)//[^'"]*$''', line )
+            if m:
+                current.append( m.group(1) )
             else:
                 current.append( line )
         if current:
