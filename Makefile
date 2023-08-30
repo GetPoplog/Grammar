@@ -32,11 +32,11 @@ endif
 .PHONY: help
 help:
 	# Valid targets are:
-	#   setup		One-time setup to poetry install & download *.war
+	#   setup       One-time setup to poetry install & download *.war
 	#   build       Creates tabatkins grammar & itemisation grammar
-	#   show		Shows the tabatkins grammar in a browser			
-	#   clean		Removes artefacts
-	#   deepclean	In addition to normal cleaning removes tools
+	#   show        Shows the tabatkins grammar in a browser			
+	#   clean       Removes artefacts
+	#   deepclean   In addition to normal cleaning removes tools
 
 .PHONY: show
 show: _build/tabatkins.html
@@ -65,7 +65,7 @@ deepclean: clean
 	rm -rf _buildtools
 
 .PHONY: build
-build: _build/tabatkins.html _build/itemisation_grammar_ebnf.txt _build/pop11_grammar_ebnf.html
+build: _build/tabatkins.html _build/itemisation_grammar_ebnf.txt _build/pop11_grammar_ebnf.html _build/itemisation_grammar_ebnf.html
 
 _build/tabatkins.html: tabatkins2html.py pop11_grammar_tabatkins.txt
 	mkdir -p _build
@@ -78,3 +78,7 @@ _build/itemisation_grammar_ebnf.txt: itemisation_grammar_ebnf.py
 _build/pop11_grammar_ebnf.html: _buildtools/railroad/rr.war
 	mkdir -p _build
 	java -jar _buildtools/railroad/rr.war pop11_grammar_ebnf.txt > $@
+
+_build/itemisation_grammar_ebnf.html: _build/itemisation_grammar_ebnf.txt
+	mkdir -p _build
+	java -jar _buildtools/railroad/rr.war _build/itemisation_grammar_ebnf.txt > $@
